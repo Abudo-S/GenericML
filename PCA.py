@@ -83,3 +83,6 @@ if __name__ == "__main__":
 
     transformed_X = pca.transform(X_train)
     print(f'transformed shape {transformed_X.shape}\n', transformed_X)
+
+    reconstructed_X = pca.inverse_transform(transformed_X)
+    print(f'reconstructed shape {reconstructed_X.shape}\n', reconstructed_X)
