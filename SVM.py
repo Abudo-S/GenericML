@@ -60,17 +60,21 @@ class SVM:
         ax = fig.add_subplot(1, 1, 1)
         plt.scatter(X[:, 0], X[:, 1], marker="o", c=y, edgecolors='k')
 
-        x0_1 = np.amin(X[:, 0])
-        x0_2 = np.amax(X[:, 0])
+        #bounary start point
+        x0_1 = np.amin(X[:, 0]) #x
+        x0_2 = np.amax(X[:, 0]) #y
 
-        x1_1 = get_hyperplane_value(x0_1, svm.weights, svm.bias, 0)
-        x1_2 = get_hyperplane_value(x0_2, svm.weights, svm.bias, 0)
+        #boundary end point(hyperplane)
+        x1_1 = get_hyperplane_value(x0_1, self.weights, self.bias, 0)
+        x1_2 = get_hyperplane_value(x0_2, self.weights, self.bias, 0)
 
-        x1_1_m = get_hyperplane_value(x0_1, svm.weights, svm.bias, -1)
-        x1_2_m = get_hyperplane_value(x0_2, svm.weights, svm.bias, -1)
+        #boundary end point(negative margine)
+        x1_1_m = get_hyperplane_value(x0_1, self.weights, self.bias, -1)
+        x1_2_m = get_hyperplane_value(x0_2, self.weights, self.bias, -1)
 
-        x1_1_p = get_hyperplane_value(x0_1, svm.weights, svm.bias, 1)
-        x1_2_p = get_hyperplane_value(x0_2, svm.weights, svm.bias, 1)
+        #boundary end point(positive margine)
+        x1_1_p = get_hyperplane_value(x0_1, self.weights, self.bias, 1)
+        x1_2_p = get_hyperplane_value(x0_2, self.weights, self.bias, 1)
 
         ax.plot([x0_1, x0_2], [x1_1, x1_2], "y--", label = "SVM hyperplane")
         ax.plot([x0_1, x0_2], [x1_1_m, x1_2_m], "k")
