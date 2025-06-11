@@ -7,10 +7,10 @@ from collections import Counter
 import pandas as pd
 
 '''
-The core of logistic regression. It squashes any real-valued number into a value between 0 and 1, which can be interpreted as a probability. σ(z)=1 / 1+e^−z
-it seeks to find a logaritmic equation that best describes how one or more independent variables (predictors, features)
-relate to a dependent variable (target).
-The model aims to find the "best-fit" line or hyperplane that MINIMIZES (not exact value predictor)
+It squashes any real-valued number into a value between 0 and 1, which can be interpreted as a probability. σ(z)= 1 / (1+e^−z)
+it seeks to find a logaritmic equation(sigmoid) that best describes how one or more independent variables (features)
+relate to a dependent variable (target label).
+The model aims to find the "best-fit" line or hyperplane that MINIMIZES the gradient(not exact value predictor "based on a predefined threshold")
 '''
 class LogisticRegression:
     def __init__(self, learning_rate=0.001, n_iters=1000, threshold=0.5):
@@ -32,7 +32,6 @@ class LogisticRegression:
             second_derivative_db = (1 / n_sample) * np.sum(y_predicted - y)
 
             #note that the stepUpdate is in the opposite of weight -= (since we're using gradient descent)
-
             self.weights -= self.learning_rate * first_derivative_dw #adjust weights with respect to the learning rate
             self.bias -= self.learning_rate * second_derivative_db #adjust bias with respect to the learning rate
 
