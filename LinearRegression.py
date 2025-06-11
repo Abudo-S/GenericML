@@ -9,7 +9,7 @@ import pandas as pd
 '''
 it seeks to find a linear equation that best describes how one or more independent variables (predictors, features)
 relate to a dependent variable (target).
-The model aims to find the "best-fit" line or hyperplane that MINIMIZES (not exact value predictor)
+The model aims to find the "best-fit" line or hyperplane that MINIMIZES the gradient(not exact value predictor)
 the difference between the predicted values and the actual values of the dependent variable
 '''
 class LinearRegression:
