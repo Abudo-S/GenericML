@@ -22,7 +22,7 @@ class SVM:
         self.lambda_param = lambda_param
         self.n_iterations = n_iterations
         self.weights = None
-        self.bais = None
+        self.bias = None
 
     '''
     the learning phase aims to adjust the weights and bias
@@ -31,56 +31,57 @@ class SVM:
         n_samples, n_features = X.shape
 
         self.weights = np.zeros(n_features)
-        self.bais = 0
+        self.bias = 0
 
         y_ = np.where(y > 0, 1, -1)
 
         for _ in range(self.n_iterations):
             for idx, x_i in enumerate(X):
-                condition = y_[idx] * (np.dot(x_i, self.weights) + self.bais) >= 1 #np.dot(wi * xi) = sum(wi * xi)
+                condition = y_[idx] * (np.dot(x_i, self.weights) + self.bias) >= 1 #np.dot(wi * xi) = sum(wi * xi)
                 
                 #note that the stepUpdate is in the opposite of weight -= (since we're using gradient descent)
                 if condition:
                     self.weights -= self.learning_rate * (2 * self.lambda_param * self.weights)
                 else:
                     self.weights -= self.learning_rate * (2 * self.lambda_param * self.weights - np.dot(x_i, y_[idx]))
-                    self.bais -= self.learning_rate * y_[idx]
+                    self.bias -= self.learning_rate * y_[idx]
 
     def predict(self, X):
-        linear_output = np.dot(X, self.weights) + self.bais
+        linear_output = np.dot(X, self.weights) + self.bias
         return np.sign(linear_output)
 
-def visualize_svm():
-    plt.clf()
-    
-    def get_hyperplane_value(x, w, b, offset):
-        return (-w[0] * x + b + offset) / w[1]
+    def visualize_svm(self, X, y):
+        plt.clf()
+        
+        def get_hyperplane_value(x, w, b, offset):
+            return (-w[0] * x + b + offset) / w[1]
 
-    fig = plt.figure()
-    ax = fig.add_subplot(1, 1, 1)
-    plt.scatter(X[:, 0], X[:, 1], marker="o", c=y)
+        fig = plt.figure()
+        ax = fig.add_subplot(1, 1, 1)
+        plt.scatter(X[:, 0], X[:, 1], marker="o", c=y, edgecolors='k')
 
-    x0_1 = np.amin(X[:, 0])
-    x0_2 = np.amax(X[:, 0])
+        x0_1 = np.amin(X[:, 0])
+        x0_2 = np.amax(X[:, 0])
 
-    x1_1 = get_hyperplane_value(x0_1, svm.weights, svm.bais, 0)
-    x1_2 = get_hyperplane_value(x0_2, svm.weights, svm.bais, 0)
+        x1_1 = get_hyperplane_value(x0_1, svm.weights, svm.bias, 0)
+        x1_2 = get_hyperplane_value(x0_2, svm.weights, svm.bias, 0)
 
-    x1_1_m = get_hyperplane_value(x0_1, svm.weights, svm.bais, -1)
-    x1_2_m = get_hyperplane_value(x0_2, svm.weights, svm.bais, -1)
+        x1_1_m = get_hyperplane_value(x0_1, svm.weights, svm.bias, -1)
+        x1_2_m = get_hyperplane_value(x0_2, svm.weights, svm.bias, -1)
 
-    x1_1_p = get_hyperplane_value(x0_1, svm.weights, svm.bais, 1)
-    x1_2_p = get_hyperplane_value(x0_2, svm.weights, svm.bais, 1)
+        x1_1_p = get_hyperplane_value(x0_1, svm.weights, svm.bias, 1)
+        x1_2_p = get_hyperplane_value(x0_2, svm.weights, svm.bias, 1)
 
-    ax.plot([x0_1, x0_2], [x1_1, x1_2], "y--")
-    ax.plot([x0_1, x0_2], [x1_1_m, x1_2_m], "k")
-    ax.plot([x0_1, x0_2], [x1_1_p, x1_2_p], "k")
+        ax.plot([x0_1, x0_2], [x1_1, x1_2], "y--", label = "SVM hyperplane")
+        ax.plot([x0_1, x0_2], [x1_1_m, x1_2_m], "k")
+        ax.plot([x0_1, x0_2], [x1_1_p, x1_2_p], "k")
 
-    x1_min = np.amin(X[:, 1])
-    x1_max = np.amax(X[:, 1])
-    ax.set_ylim([x1_min - 3, x1_max + 3])
+        x1_min = np.amin(X[:, 1])
+        x1_max = np.amax(X[:, 1])
+        ax.set_ylim([x1_min - 3, x1_max + 3])
 
-    plt.show()
+        plt.legend()
+        plt.show()
 
 if __name__ == "__main__":
     X, y = datasets.make_blobs(
@@ -103,4 +104,5 @@ if __name__ == "__main__":
     print(f'Acc.:{accuracy}') #for classification problems we use the accuracy
     #in case of base of bad accuracy we might try to use preprocessing techniques like "scale standarization"
     
-    visualize_svm()
+    svm.visualize_svm(X, y)
+    plt.show()
