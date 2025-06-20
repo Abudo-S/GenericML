@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 '''
 PCA is a preprocessing algorithm used to reduce dataset dimensionlity (features). It extracts the most important component in the dataset that
 highly influence the variance.
+Note that PCA is an unsupervised algorithm that doesn't consider target label values, it just focuses on feature variance maximization.
 '''
 class PCA:
     '''
@@ -22,7 +23,7 @@ class PCA:
         
 
     def fit(self, X: np.ndarray):
-        n_samples, n_features = X.shape
+        _, n_features = X.shape
         self.mean = np.mean(X, axis=0)
         X = X - self.mean
 
@@ -55,6 +56,7 @@ class PCA:
     def transform(self, X):
         if self.components is None or self.mean is None:
             raise ValueError("PCA model has not been fitted yet. Call fit() first.")
+        
         centered_X = X - self.mean
         transformed_X = np.dot(centered_X, self.components)
         return transformed_X
@@ -63,6 +65,7 @@ class PCA:
     def inverse_transform(self, X_transformed):
         if self.components is None or self.mean is None:
             raise ValueError("PCA model has not been fitted yet. Call fit() first.")
+        
         reconstructed_X_centered = np.dot(X_transformed, self.components.T)
         reconstructed_X = reconstructed_X_centered + self.mean
         return reconstructed_X
