@@ -35,6 +35,32 @@ class SVM:
 
         y_ = np.where(y > 0, 1, -1)
 
+        #Batch gradient descent
+        # for _ in range(self.n_iterations):
+        #     dw = np.zeros(n_features)
+        #     db = 0                   
+
+        #     for idx in range(n_samples):
+        #         x_i = X[idx]
+        #         y_i = y_[idx]
+
+        #         #hinge loss
+        #         margin_score = y_i * (np.dot(x_i, self.weights) + self.bias)
+
+        #         if margin_score < 1:
+        #             dw += (-y_i * x_i)
+        #             db += (-y_i)
+
+        #     dw_avg_hinge = dw / n_samples
+        #     db_avg_hinge = db / n_samples
+
+        #     total_gradient_w = dw_avg_hinge + (2 * self.lambda_param * self.weights)
+        #     total_gradient_b = db_avg_hinge
+
+        #     self.weights -= self.learning_rate * total_gradient_w
+        #     self.bias    -= self.learning_rate * total_gradient_b
+
+        #Stocastic gradient descent
         for _ in range(self.n_iterations):
             for idx, x_i in enumerate(X):
                 condition = y_[idx] * (np.dot(x_i, self.weights) + self.bias) >= 1 #np.dot(wi * xi) = sum(wi * xi)
